@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk, filedialog
 import threading
+import webbrowser
 
 class ToolTip:
     """Tooltip class for pop-up information"""
@@ -34,77 +35,71 @@ class KeySenderApp:
     def __init__(self, master):
         self.master = master
         self.master.title("Keystrike v1")
-        self.master.configure(bg="#FFFFFF")  # Background color
+        self.master.configure(bg="#FFFFFF")
         self.master.resizable(False, False)
 
-        self.running = False  # Track the process state
-        self.lock = threading.Lock()  # Thread safety for running flag
+        self.running_event = threading.Event()
 
-        # Style settings
         style = ttk.Style()
-        style.configure('TFrame', background="#FFFFFF")  # Frame background
+        style.configure('TFrame', background="#FFFFFF")
         style.configure('TLabel', background="#FFFFFF", font=("Arial", 12))
         style.configure('TButton', font=("Arial", 12), padding=4)
         style.configure('TEntry', font=("Arial", 12), padding=4)
 
-        # Main frame
-        self.frame = ttk.Frame(self.master, padding="5")
-        self.frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        self.menu_bar = tk.Menu(self.master)
+        self.master.config(menu=self.menu_bar)
 
-        # Create title label
+        self.credits_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.credits_menu.add_command(label="GitHub", command=self.open_github)
+        self.credits_menu.add_command(label="Discord", command=self.open_discord)
+        
+        self.menu_bar.add_cascade(label="Credits", menu=self.credits_menu)
+
+        self.frame = ttk.Frame(self.master, padding="5")
+        self.frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
         self.title_label = ttk.Label(self.frame, text="Keystrike v1", font=("Arial", 24, "bold"), foreground="#2E86C1")
         self.title_label.grid(row=0, column=0, columnspan=3, pady=(0, 10))
 
-        # Delay (in seconds)
-        self.delay_entry = self.create_label_and_entry("Delay (s):", "3", 1,
+        self.delay_entry = self.create_label_and_entry("Delay (s):", "3", 2,
                                                        "The delay before sending the first message.") 
          
-        # Delay after message sending
-        self.send_delay_entry = self.create_label_and_entry("Delay after sending (s):", "3", 2,
+        self.send_delay_entry = self.create_label_and_entry("Delay after sending (s):", "3", 3,
                                                        "The delay between sending messages.")
 
-        # Number of messages
-        self.count_entry = self.create_label_and_entry("Number of messages:", "100", 3,
+        self.count_entry = self.create_label_and_entry("Number of messages:", "100", 4,
                                                        "The number of messages you want to send.")
 
-        # Text to send (multi-line input)
-        self.text_entry = self.create_label_and_textbox("Text to send (one per line):", "Text", 4,
+        self.text_entry = self.create_label_and_textbox("Text to send (one per line):", "Your Message", 5,
                                                        "The text you want to send, each message on a new line.")
 
-        # Load messages from file button
         self.load_button = ttk.Button(self.frame, text="Load Messages", command=self.load_messages)
-        self.load_button.grid(row=5, column=0, columnspan=3, pady=(10, 5))
+        self.load_button.grid(row=6, column=0, columnspan=3, pady=(10, 5))
 
-        # Buttons side by side
         button_frame = ttk.Frame(self.frame)
-        button_frame.grid(row=6, column=0, columnspan=3, pady=5)
+        button_frame.grid(row=7, column=0, columnspan=3, pady=5)
 
-        # Start button
         self.start_button = ttk.Button(button_frame, text="Start", command=self.send_keys_wrapper)
         self.start_button.grid(row=0, column=0, padx=5)
 
-        # Stop button
-        self.stop_button = ttk.Button(button_frame, text="Stop", command=self.stop_operation)
+        self.stop_button = ttk.Button(button_frame, text="Stop", command=self.stop_operation, state=tk.DISABLED)
         self.stop_button.grid(row=0, column=1, padx=5)
 
-        # Exit button
         exit_button = ttk.Button(button_frame, text="Exit", command=self.exit_app)
         exit_button.grid(row=0, column=2, padx=5)
 
-        # Contact and author name
-        self.author_label = ttk.Label(self.frame, text="Discord: xosisco", font=("Arial", 10))
-        self.author_label.grid(row=7, column=0, columnspan=3, pady=(5, 0))
+    def open_github(self):
+        webbrowser.open("https://github.com/dtbsisco")
 
-        # Automatic resizing
-        self.frame.grid_columnconfigure(0, weight=1)
-        self.frame.grid_columnconfigure(1, weight=2)
+    def open_discord(self):
+        webbrowser.open("https://discord.com/users/1180583624567967786")
 
     def create_label_and_input(self, label_text, default_value, row, tooltip_text, is_textbox=False):
         label = ttk.Label(self.frame, text=label_text)
         label.grid(row=row, column=0, padx=5, pady=5, sticky="e")
 
         if is_textbox:
-            input_widget = tk.Text(self.frame, height=10, width=40, bg="#F8F8F8", wrap='word')  # Bigger text area for input
+            input_widget = tk.Text(self.frame, height=10, width=40, bg="#F8F8F8", wrap='word')
             input_widget.grid(row=row, column=1, padx=5, pady=5)
             input_widget.insert("1.0", default_value)
         else:
@@ -112,11 +107,9 @@ class KeySenderApp:
             input_widget.grid(row=row, column=1, padx=5, pady=5)
             input_widget.insert(0, default_value)
 
-        # Adding info icon
-        info_icon = ttk.Label(self.frame, text="ℹ️", font=("Arial", 12), foreground="blue")
+        info_icon = ttk.Label(self.frame, text="ℹ️", font=("Arial", 12), foreground="#2E86C1")
         info_icon.grid(row=row, column=2, padx=5)
 
-        # Creating tooltip for the info icon
         ToolTip(info_icon, tooltip_text)
 
         return input_widget
@@ -132,18 +125,18 @@ class KeySenderApp:
         if file_path:
             with open(file_path, 'r', encoding='utf-8') as file:
                 messages = file.readlines()
-            self.text_entry.delete("1.0", tk.END)  # Clear existing text
-            self.text_entry.insert("1.0", ''.join(messages))  # Load messages into the text area
+            self.text_entry.delete("1.0", tk.END)
+            self.text_entry.insert("1.0", ''.join(messages))
 
     def validate_inputs(self):
         try:
-            delay = int(self.delay_entry.get())
+            delay = float(self.delay_entry.get())
             count = int(self.count_entry.get())
             send_delay = int(self.send_delay_entry.get())
-            text = self.text_entry.get("1.0", tk.END).strip()  # Retrieve multi-line text
+            text = self.text_entry.get("1.0", tk.END).strip()
 
             if delay < 0 or count <= 0 or send_delay < 0 or not text:
-                raise ValueError("Delay cannot be negative, the number of messages must be at least 1, and text cannot be empty.")
+                raise ValueError("Delay cannot be negative, the number of messages must be at least 1, and text cannot be empty!")
 
             return delay, count, text, send_delay
         except ValueError as e:
@@ -152,40 +145,35 @@ class KeySenderApp:
 
     def send_keys(self, text, count, delay, send_delay):
         time.sleep(delay)
-        start_time = time.time()
-
-        # Split messages by lines
         messages = text.splitlines()
-        messages = [message.strip() for message in messages if message.strip()]  # Clean up the messages
+        messages = [message.strip() for message in messages if message.strip()]
 
-        # Send messages in a single operation
-        if messages:  # Only proceed if there are valid messages
+        if messages:
             for _ in range(count):
-                with self.lock:  # Ensure thread safety
-                    if not self.running:
-                        break
+                if not self.running_event.is_set():
+                    break
                 for message in messages:
-                    with self.lock:  # Ensure thread safety
-                        if not self.running:
-                            return  # Exit if not running
-                    keyboard.write(message)  # Send message
-                    keyboard.press_and_release('enter')  # New line after each message
-                    time.sleep(send_delay)  # Wait after sending the message
+                    if not self.running_event.is_set():
+                        return
+                    keyboard.write(message)
+                    keyboard.press_and_release('enter')
+                    time.sleep(send_delay)
 
     def send_keys_wrapper(self):
-        inputs = self.validate_inputs()
-        if inputs:
-            delay, count, text, send_delay = inputs
-            self.start_operation()  # Set running state to True
+        validated_inputs = self.validate_inputs()
+        if validated_inputs:
+            delay, count, text, send_delay = validated_inputs
+
+            self.running_event.set()
+            self.start_button['state'] = tk.DISABLED
+            self.stop_button['state'] = tk.NORMAL
+
             threading.Thread(target=self.send_keys, args=(text, count, delay, send_delay), daemon=True).start()
 
-    def start_operation(self):
-        with self.lock:
-            self.running = True
-
     def stop_operation(self):
-        with self.lock:
-            self.running = False
+        self.running_event.clear()
+        self.start_button['state'] = tk.NORMAL
+        self.stop_button['state'] = tk.DISABLED
 
     def exit_app(self):
         self.master.quit()
