@@ -5,6 +5,7 @@ from tkinter import messagebox
 from tkinter import ttk, filedialog
 import threading
 import webbrowser
+from plyer import notification
 
 class ToolTip:
     """Tooltip class for pop-up information"""
@@ -79,14 +80,17 @@ class KeySenderApp:
         button_frame = ttk.Frame(self.frame)
         button_frame.grid(row=7, column=0, columnspan=3, pady=5)
 
-        self.start_button = ttk.Button(button_frame, text="Start", command=self.send_keys_wrapper)
+        self.start_button = ttk.Button(button_frame, text="Start (F8)", command=self.send_keys_wrapper)
         self.start_button.grid(row=0, column=0, padx=5)
 
-        self.stop_button = ttk.Button(button_frame, text="Stop", command=self.stop_operation, state=tk.DISABLED)
+        self.stop_button = ttk.Button(button_frame, text="Stop (F9)", command=self.stop_operation, state=tk.DISABLED)
         self.stop_button.grid(row=0, column=1, padx=5)
 
         exit_button = ttk.Button(button_frame, text="Exit", command=self.exit_app)
         exit_button.grid(row=0, column=2, padx=5)
+
+        keyboard.add_hotkey('F8', self.send_keys_wrapper)
+        keyboard.add_hotkey('F9', self.stop_operation)
 
     def open_github(self):
         webbrowser.open("https://github.com/dtbsisco")
@@ -158,6 +162,7 @@ class KeySenderApp:
                     keyboard.write(message)
                     keyboard.press_and_release('enter')
                     time.sleep(send_delay)
+                    keyboard.press_and_release('enter')
 
     def send_keys_wrapper(self):
         validated_inputs = self.validate_inputs()
@@ -170,10 +175,24 @@ class KeySenderApp:
 
             threading.Thread(target=self.send_keys, args=(text, count, delay, send_delay), daemon=True).start()
 
+            notification.notify(
+                title="Keystrike",
+                message="Keystrike has started sending messages",
+                app_name="Keystrike",
+                timeout=5
+            )
+
     def stop_operation(self):
         self.running_event.clear()
         self.start_button['state'] = tk.NORMAL
         self.stop_button['state'] = tk.DISABLED
+        
+        notification.notify(
+            title="Keystrike",
+            message="Keystrike has stopped sending messages",
+            app_name="Keystrike",
+            timeout=5
+        )
 
     def exit_app(self):
         self.master.quit()
