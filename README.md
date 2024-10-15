@@ -2,8 +2,7 @@
 
 - **Automatic Message Sending**: Sends a sequence of predefined messages at set intervals.
 - **User-Friendly GUI**: A clean and intuitive interface using Tkinter for easy configuration and message input.
-- **Hotkey Support**: Default hotkeys are set to F8 (start) and F9 (stop), which can be customized through the settings menu.
-- **Settings Persistence**: Hotkey settings are saved in a `settings.ini` file, so you don’t have to reconfigure them each time.
+- **Hotkey Support**: Default hotkeys are set to F8 (start) and F9 (stop).
 - **Load Messages from File**: You can load message sequences from text files for ease of use.
 
 ## Installation
