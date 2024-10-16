@@ -50,11 +50,15 @@ class KeySenderApp:
         self.menu_bar = tk.Menu(self.master)
         self.master.config(menu=self.menu_bar)
 
-        self.credits_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.credits_menu.add_command(label="GitHub", command=self.open_github)
-        self.credits_menu.add_command(label="Discord", command=self.open_discord)
-        
-        self.menu_bar.add_cascade(label="Credits", menu=self.credits_menu)
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.file_menu.add_command(label="Load Messages", command=self.load_messages)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+
+        self.author_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.author_menu.add_command(label="GitHub", command=self.open_github)
+        self.author_menu.add_command(label="Discord", command=self.open_discord)
+
+        self.menu_bar.add_cascade(label="Author", menu=self.author_menu)
 
         self.frame = ttk.Frame(self.master, padding="5")
         self.frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -73,9 +77,6 @@ class KeySenderApp:
 
         self.text_entry = self.create_label_and_textbox("Text to send (one per line):", "Your Message", 5,
                                                        "The text you want to send, each message on a new line.")
-
-        self.load_button = ttk.Button(self.frame, text="Load Messages", command=self.load_messages)
-        self.load_button.grid(row=6, column=0, columnspan=3, pady=(10, 5))
 
         button_frame = ttk.Frame(self.frame)
         button_frame.grid(row=7, column=0, columnspan=3, pady=5)
@@ -103,8 +104,16 @@ class KeySenderApp:
         label.grid(row=row, column=0, padx=5, pady=5, sticky="e")
 
         if is_textbox:
-            input_widget = tk.Text(self.frame, height=10, width=40, bg="#F8F8F8", wrap='word')
-            input_widget.grid(row=row, column=1, padx=5, pady=5)
+            textbox_frame = ttk.Frame(self.frame)
+            textbox_frame.grid(row=row, column=1, padx=5, pady=5)
+
+            input_widget = tk.Text(textbox_frame, height=10, width=40, bg="#F8F8F8", wrap='word')
+            input_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+            scrollbar = tk.Scrollbar(textbox_frame, command=input_widget.yview)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+            input_widget.config(yscrollcommand=scrollbar.set)
             input_widget.insert("1.0", default_value)
         else:
             input_widget = ttk.Entry(self.frame, justify='center')
