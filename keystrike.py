@@ -8,7 +8,6 @@ import webbrowser
 from plyer import notification
 
 class ToolTip:
-    """Tooltip class for pop-up information"""
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text
@@ -46,6 +45,8 @@ class KeySenderApp:
         style.configure('TLabel', background="#FFFFFF", font=("Arial", 12))
         style.configure('TButton', font=("Arial", 12), padding=4)
         style.configure('TEntry', font=("Arial", 12), padding=4)
+        
+        style.configure('TCheckbutton', background="#FFFFFF", relief="flat")
 
         self.menu_bar = tk.Menu(self.master)
         self.master.config(menu=self.menu_bar)
@@ -76,7 +77,11 @@ class KeySenderApp:
                                                        "The number of messages you want to send.")
 
         self.text_entry = self.create_label_and_textbox("Text to send (one per line):", "Your Message", 5,
-                                                       "The text you want to send, each message on a new line.")
+                                                       "The text you want to send.")
+
+        self.line_by_line_var = tk.BooleanVar(value=True)
+        self.line_by_line_checkbox = ttk.Checkbutton(self.frame, text="Send each message on a new line", variable=self.line_by_line_var)
+        self.line_by_line_checkbox.grid(row=6, column=0, columnspan=3, pady=(5, 10))
 
         button_frame = ttk.Frame(self.frame)
         button_frame.grid(row=7, column=0, columnspan=3, pady=5)
@@ -165,13 +170,23 @@ class KeySenderApp:
             for _ in range(count):
                 if not self.running_event.is_set():
                     break
-                for message in messages:
-                    if not self.running_event.is_set():
-                        return
-                    keyboard.write(message)
+                
+                if self.line_by_line_var.get():
+                    for message in messages:
+                        if not self.running_event.is_set():
+                            return
+                        keyboard.write(message)
+                        keyboard.press_and_release('enter')
+                        time.sleep(send_delay)
+                        keyboard.press_and_release('enter')
+                else:
+                    combined_message = " ".join(messages)
+                    keyboard.write(combined_message)
                     keyboard.press_and_release('enter')
                     time.sleep(send_delay)
                     keyboard.press_and_release('enter')
+
+        self.stop_operation()
 
     def send_keys_wrapper(self):
         validated_inputs = self.validate_inputs()
