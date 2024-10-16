@@ -4,8 +4,8 @@
 - **User-Friendly GUI**: A clean and intuitive interface using Tkinter for easy configuration and message input.
 - **Hotkey Support**: Default hotkeys are set to F8 (start) and F9 (stop).
 - **Load Messages from File**: You can load message sequences from text files for ease of use.
-- **Unlimited Number of Messages:** Users can send an unlimited number of messages-
-- **Optional Delay**: Delay is not mandatory; if the user does not specify a delay, messages will be sent immediately.
+- **Unlimited Number of Messages:** You can send an unlimited number of messages.
+- **Optional Delay**: Delay is not neccessary, if you does not specify a delay, messages will be sent immediately.
 
 ## Installation
 
@@ -13,13 +13,11 @@
    - `keyboard`
    - `plyer`
    - `tkinter` (usually included with Python)
-   - `configparser`
-   - `requests`
    
    Install the required packages by running:
 
    ```bash
-   pip install keyboard plyer requests
+   pip install keyboard plyer
    ```
 2. **Clone the Repository**: Download the source code by cloning the repository:
 
