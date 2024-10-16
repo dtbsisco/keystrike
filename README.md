@@ -33,3 +33,6 @@
 
    ```bash
     python keystrike.py or .\keystrike.py
+
+## 📜 License
+Keystrike is licensed under the [MIT License](https://github.com/dtbsisco/keystrike/blob/main/LICENSE).
