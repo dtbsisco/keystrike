@@ -76,7 +76,7 @@ class KeySenderApp:
         self.count_entry = self.create_label_and_entry("Number of messages:", "100", 4,
                                                        "The number of messages you want to send.")
 
-        self.text_entry = self.create_label_and_textbox("Text to send (one per line):", "Your Message", 5,
+        self.text_entry = self.create_label_and_textbox("Text to send:", "Your Message", 5,
                                                        "The text you want to send.")
 
         self.line_by_line_var = tk.BooleanVar(value=True)
