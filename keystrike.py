@@ -24,7 +24,7 @@ class ToolTip:
         self.tooltip_window = tk.Toplevel(self.widget)
         self.tooltip_window.wm_overrideredirect(True)
         self.tooltip_window.wm_geometry(f"+{x}+{y}")
-        label = ttk.Label(self.tooltip_window, text=self.text, relief="solid", borderwidth=1, background="lightyellow")
+        label = ttk.Label(self.tooltip_window, text=self.text, relief="solid", borderwidth=1, background="#FFFFFF")
         label.pack()
 
     def hide_tooltip(self, event):
