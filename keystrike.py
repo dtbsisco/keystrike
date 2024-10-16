@@ -186,11 +186,13 @@ class KeySenderApp:
                         keyboard.write(message)
                         keyboard.press_and_release('enter')
                         time.sleep(send_delay)
+                        keyboard.press_and_release('enter')
                 else:
                     combined_message = " ".join(messages)
                     keyboard.write(combined_message)
                     keyboard.press_and_release('enter')
                     time.sleep(send_delay)
+                    keyboard.press_and_release('enter')
 
         self.stop_operation()
 
