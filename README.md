@@ -21,7 +21,7 @@
    Install the required packages by running:
 
    ```bash
-   pip install keyboard plyer
+   pip install -r requirements.txt
    ```
 2. **Clone the Repository**: Download the source code by cloning the repository:
 
