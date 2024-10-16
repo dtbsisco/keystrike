@@ -13,7 +13,13 @@
 
 ## 💻 Installation
 
-1. **Requirements**: To run the program, you’ll need Python 3.x and the following packages:
+1. **Clone the Repository**: Download the source code by cloning the repository:
+
+   ```bash
+    git clone https://github.com/dtbsisco/Keystrike.git
+    cd Keystrike
+
+2. **Requirements**: To run the program, you’ll need Python 3.x and the following packages:
    - `keyboard`
    - `plyer`
    - `tkinter` (usually included with Python)
@@ -23,11 +29,6 @@
    ```bash
    pip install -r requirements.txt
    ```
-2. **Clone the Repository**: Download the source code by cloning the repository:
-
-   ```bash
-    git clone https://github.com/dtbsisco/Keystrike.git
-    cd Keystrike
 
 3. **Run Keystrike**: Start the program by executing the following command:
 
