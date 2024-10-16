@@ -45,7 +45,6 @@ class KeySenderApp:
         style.configure('TLabel', background="#FFFFFF", font=("Arial", 12))
         style.configure('TButton', font=("Arial", 12), padding=4)
         style.configure('TEntry', font=("Arial", 12), padding=4)
-        
         style.configure('TCheckbutton', background="#FFFFFF", relief="flat")
 
         self.menu_bar = tk.Menu(self.master)
@@ -69,7 +68,7 @@ class KeySenderApp:
 
         self.delay_entry = self.create_label_and_entry("Delay (s):", "3", 2,
                                                        "The delay before sending the first message.") 
-         
+
         self.send_delay_entry = self.create_label_and_entry("Delay after sending (s):", "3", 3,
                                                        "The delay between sending messages.")
 
@@ -141,10 +140,13 @@ class KeySenderApp:
     def load_messages(self):
         file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
         if file_path:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                messages = file.readlines()
-            self.text_entry.delete("1.0", tk.END)
-            self.text_entry.insert("1.0", ''.join(messages))
+            try:
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    messages = file.readlines()
+                self.text_entry.delete("1.0", tk.END)
+                self.text_entry.insert("1.0", ''.join(messages))
+            except Exception as e:
+                messagebox.showerror("File Error", "An error occurred while loading the file: " + str(e))
 
     def validate_inputs(self):
         try:
@@ -153,12 +155,18 @@ class KeySenderApp:
             send_delay = int(self.send_delay_entry.get())
             text = self.text_entry.get("1.0", tk.END).strip()
 
-            if delay < 0 or count <= 0 or send_delay < 0 or not text:
-                raise ValueError("Delay cannot be negative, the number of messages must be at least 1, and text cannot be empty!")
+            if delay < 0:
+                raise ValueError("Error: Delay cannot be negative.")
+            if count <= 0:
+                raise ValueError("Error: The number of messages must be at least 1.")
+            if send_delay < 0:
+                raise ValueError("Error: Send delay cannot be negative.")
+            if not text:
+                raise ValueError("Error: Text cannot be empty!")
 
             return delay, count, text, send_delay
         except ValueError as e:
-            messagebox.showerror("Error", str(e))
+            messagebox.showerror("Input Error", str(e))
             return None
 
     def send_keys(self, text, count, delay, send_delay):
@@ -178,13 +186,11 @@ class KeySenderApp:
                         keyboard.write(message)
                         keyboard.press_and_release('enter')
                         time.sleep(send_delay)
-                        keyboard.press_and_release('enter')
                 else:
                     combined_message = " ".join(messages)
                     keyboard.write(combined_message)
                     keyboard.press_and_release('enter')
                     time.sleep(send_delay)
-                    keyboard.press_and_release('enter')
 
         self.stop_operation()
 
