@@ -1,4 +1,8 @@
-## Features
+<p align="center">
+<img width="250" height="250" src="https://i.imgur.com/uALUlli.png">
+</p>
+
+## ⭐ Features
 
 - **Automatic Message Sending**: Sends a sequence of predefined messages at set intervals.
 - **User-Friendly GUI**: A clean and intuitive interface using Tkinter for easy configuration and message input.
@@ -7,7 +11,7 @@
 - **Unlimited Number of Messages:** You can send an unlimited number of messages.
 - **Optional Delay**: Delay is not neccessary, if you does not specify a delay, messages will be sent immediately.
 
-## Installation
+## 💻 Installation
 
 1. **Requirements**: To run the program, you’ll need Python 3.x and the following packages:
    - `keyboard`
