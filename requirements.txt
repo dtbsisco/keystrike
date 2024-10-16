@@ -1,2 +1,2 @@
-keyboard==0.13.5
-plyer==2.0.0
+keyboard
+plyer
