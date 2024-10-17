@@ -2,6 +2,10 @@
 <img width="250" height="250" src="https://i.imgur.com/uALUlli.png">
 </p>
 
+[![Python3](https://img.shields.io/badge/Python-3.x-green.svg?style=flat-square)](https://www.python.org/downloads/)
+![OS](https://img.shields.io/badge/Tested%20On-Windows-yellowgreen.svg?style=flat-square)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)]((https://github.com/dtbsisco/keystrike/blob/main/LICENSE))
+
 ## ⭐ Features
 
 - **Automatic Message Sending**: Sends a sequence of predefined messages at set intervals.
