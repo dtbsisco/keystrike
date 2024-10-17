@@ -39,5 +39,8 @@
    ```bash
     python keystrike.py or .\keystrike.py
 
+## 📌 Showcase
+![GIF előnézete](https://i.imgur.com/D1OVEJj.gif)
+
 ## 📜 License
 Keystrike is licensed under the [MIT License](https://github.com/dtbsisco/keystrike/blob/main/LICENSE).
